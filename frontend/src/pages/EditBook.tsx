@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router";
+import { useGetBookByIdQuery, useUpdateBookMutation } from "../redux/api/baseApi";
 import type { IBookForm } from "../interfaces/interfaces";
-import { useCreateBookMutation } from "../redux/api/baseApi";
 
-const AddBook = () => {
+const EditBook = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const { data, isLoading, isError } = useGetBookByIdQuery(id);
+
+  const [updateBook] = useUpdateBookMutation();
 
   const [formData, setFormData] = useState<IBookForm>({
     title: "",
@@ -16,14 +21,13 @@ const AddBook = () => {
     available: true,
   });
 
-  const [createBook, { isLoading }] = useCreateBookMutation();
+  useEffect(() => {
+    if (data?.data) {
+      setFormData(data.data);
+    }
+  }, [data]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  const handleChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
     const target = e.target;
     const { name, value, type } = target;
     console.log("input form data", { name, value, type });
@@ -45,25 +49,21 @@ const AddBook = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      const res = await createBook(formData).unwrap();
-      console.log("res for post Data", res.data);
-
-      if (res.data.success) {
-        navigate("/books");
-      } else {
-        alert("something is wrong");
-      }
-    } catch (error: any) {
-      console.log(error.message);
+      await updateBook({ id, updatedData: formData }).unwrap();
+      alert("Book updated successfully ✅");
+      navigate("/books");
+    } catch (error) {
+      console.error(error);
     }
   };
 
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Something went wrong!</p>;
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-green-600 mb-6">Add New Book</h1>
+      <h1 className="text-2xl font-bold text-green-600 mb-6">Edit Book</h1>
       <form
         onSubmit={handleSubmit}
         className="space-y-4 bg-white p-6 rounded shadow-2xl"
@@ -76,9 +76,10 @@ const AddBook = () => {
             required
             value={formData.title}
             onChange={handleChange}
-            className="w-full border border-green-600 px-3 py-2 rounded outline-none focus:border-none focus:ring-2 focus:ring-green-500"
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
+
         <div>
           <label className="block text-gray-700 mb-1">Author</label>
           <input
@@ -87,9 +88,10 @@ const AddBook = () => {
             required
             value={formData.author}
             onChange={handleChange}
-            className="w-full border border-green-600 px-3 py-2 rounded outline-none focus:border-none focus:ring-2 focus:ring-green-500"
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
+
         <div>
           <label className="block text-gray-700 mb-1">Genre</label>
           <input
@@ -98,9 +100,10 @@ const AddBook = () => {
             required
             value={formData.genre}
             onChange={handleChange}
-            className="w-full border border-green-600 px-3 py-2 rounded outline-none focus:border-none focus:ring-2 focus:ring-green-500"
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
+
         <div>
           <label className="block text-gray-700 mb-1">ISBN</label>
           <input
@@ -109,9 +112,10 @@ const AddBook = () => {
             required
             value={formData.isbn}
             onChange={handleChange}
-            className="w-full border border-green-600 px-3 py-2 rounded outline-none focus:border-none focus:ring-2 focus:ring-green-500"
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
+
         <div>
           <label className="block text-gray-700 mb-1">Description</label>
           <textarea
@@ -119,9 +123,10 @@ const AddBook = () => {
             rows={3}
             value={formData.description}
             onChange={handleChange}
-            className="w-full border border-green-600 px-3 py-2 rounded outline-none focus:border-none focus:ring-2 focus:ring-green-500"
-          ></textarea>
+            className="w-full border px-3 py-2 rounded"
+          />
         </div>
+
         <div>
           <label className="block text-gray-700 mb-1">Copies</label>
           <input
@@ -131,9 +136,10 @@ const AddBook = () => {
             required
             value={formData.copies}
             onChange={handleChange}
-            className="w-full border border-green-600 px-3 py-2 rounded outline-none focus:border-none focus:ring-2 focus:ring-green-500"
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
+
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
@@ -144,17 +150,16 @@ const AddBook = () => {
           />
           <label className="text-gray-700">Available</label>
         </div>
-        <div className="pt-4">
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-          >
-            Add Book
-          </button>
-        </div>
+
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Update Book
+        </button>
       </form>
     </div>
   );
 };
 
-export default AddBook;
+export default EditBook;

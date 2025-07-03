@@ -1,5 +1,5 @@
 export interface IBook {
-  id: string;
+  _id: string;
   title: string;
   author: string;
   genre: string;
@@ -17,9 +17,11 @@ export interface IBookForm {
   copies: number;
   available: boolean;
 }
+
 export interface IBorrowSummary {
-  id: string;
-  title: string;
-  isbn: string;
-  totalBorrowed: number;
+  book: {
+    title: string;
+    isbn: string;
+  };
+  totalQuantity: number;
 }
