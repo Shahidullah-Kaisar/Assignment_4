@@ -122,9 +122,9 @@ src/
 
 ## Links
 
-- [Backend Repository](https://github.com/Shahidullah-Kaisar/Library-Management-Server.git)  
-- [Live Frontend Site](https://your-live-site.com)
-- [Live Backend Site](https://your-live-site.com)
+- [Backend Repository](https://github.com/Shahidullah-Kaisar/Library-Management-Server_A-3.git)  
+- [Live Frontend Site]( https://library-management-tau-pink.vercel.app/)
+- [Live Backend Site](https://librarynode.vercel.app/)
 
 ---
 
