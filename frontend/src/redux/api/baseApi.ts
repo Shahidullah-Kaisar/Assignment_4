@@ -2,10 +2,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://librarynode.vercel.app/api" }),
   tagTypes: ["book"],
   endpoints: (builder) => ({
-    
+
     getBooks: builder.query<any, void>({
       query: () => "/books",
       providesTags: ["book"],
