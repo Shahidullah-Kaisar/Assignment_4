@@ -7,7 +7,7 @@ This project allows users to manage a list of books and borrow them without auth
 
 ---
 
-## 🚀 Features
+## Features
 
 ✅ View all books  
 ✅ Add, Edit, and Delete books  
