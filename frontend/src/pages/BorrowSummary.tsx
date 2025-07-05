@@ -5,8 +5,7 @@ const BorrowSummary = () => {
 
   const { data, isLoading, isError } = useGetBorrowSummaryQuery();
 
-    const books = data?.data ?? [];
-    console.log("Data From BorrowSummary.tsx", books)
+  const books = data?.data ?? [];
 
   if (isLoading) {
     return <p className="text-center py-10">Loading summary...</p>;
@@ -17,8 +16,8 @@ const BorrowSummary = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-green-600 mb-6">📊 Borrow Summary</h1>
+    <div className="max-w-5xl mx-auto px-4 py-8 min-h-screen">
+      <h1 className="text-2xl font-bold text-green-600 mb-6">Borrow Summary</h1>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow rounded">
@@ -29,14 +28,17 @@ const BorrowSummary = () => {
               <th className="py-2 px-4 text-center">Total Quantity Borrowed</th>
             </tr>
           </thead>
+
           <tbody>
+
             {books.map((item : IBorrowSummary, idx: number) => (
-              <tr key={idx} className="border-t hover:bg-gray-200 duration-300">
+              <tr key={idx} className="border-t border-gray-300 hover:bg-gray-200 duration-300">
                 <td className="py-4 px-4">{item.book.title}</td>
                 <td className="py-4 px-4">{item.book.isbn}</td>
                 <td className="py-4 px-4 text-center font-semibold text-gray-700">{item.totalQuantity}</td>
               </tr>
             ))}
+            
           </tbody>
         </table>
 

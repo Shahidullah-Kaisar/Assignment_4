@@ -1,17 +1,18 @@
-// src/pages/BorrowBook.tsx
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import {useGetBookByIdQuery,useBorrowBookMutation } from "../redux/api/baseApi";
+import { toast } from "react-toastify";
+import { warning } from "../utils/warning";
 
-const BorrowBook: React.FC = () => {
+const BorrowBook = () => {
+
   const { bookId } = useParams<{ bookId: string }>();
+
   const navigate = useNavigate();
 
   const { data, isLoading } = useGetBookByIdQuery(bookId);
   
   const book = data?.data ?? [];
-  console.log("borrow page", book)
 
   const [borrowBook] = useBorrowBookMutation();
 
@@ -19,19 +20,26 @@ const BorrowBook: React.FC = () => {
   const [dueDate, setDueDate] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
+
     e.preventDefault();
+    
     if (!bookId || !dueDate) return;
 
     if (quantity > book?.copies) {
-      alert("Cannot borrow more than available copies.");
+      warning(book?.copies, quantity);
       return;
     }
 
     try {
-      await borrowBook({ book: bookId, quantity, dueDate }).unwrap();
-      navigate("/borrow-summary");
-    } catch (error) {
-      console.error("Borrow failed:", error);
+      const res = await borrowBook({ book: bookId, quantity, dueDate }).unwrap();
+
+      if(res.success){
+        toast.success(res.message)
+        navigate("/borrow-summary");
+      }
+      
+    } catch (error: any) {
+      toast.error(error.message)
     }
   };
 
@@ -39,9 +47,10 @@ const BorrowBook: React.FC = () => {
   if (!book) return <p className="text-center text-red-500 py-10">Book not found.</p>;
 
   return (
+    
     <div className="max-w-xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-green-600 mb-6">
-        📕 Borrow: {book.title}
+        Borrow: <span className="text-red-600">{book.title}</span>
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow">
@@ -50,7 +59,7 @@ const BorrowBook: React.FC = () => {
           <input
             type="number"
             min={1}
-            max={book.copies}
+            // max={book.copies}
             value={quantity}
             onChange={(e) => setQuantity(Number(e.target.value))}
             required
