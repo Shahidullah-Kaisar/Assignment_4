@@ -49,7 +49,7 @@ This project allows users to manage a list of books and borrow them without auth
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Shahidullah-Kaisar/Assignment_4.git
+git clone https://github.com/Shahidullah-Kaisar/Library-Management-Client_A-4.git
 cd library-management-client
 ```
 
@@ -122,9 +122,9 @@ src/
 
 ## Links
 
-- [Backend Repository](https://github.com/Shahidullah-Kaisar/Library-Management-Server.git)  
-- [Live Frontend Site](https://your-live-site.com)
-- [Live Backend Site](https://your-live-site.com)
+- [Backend Repository]( https://github.com/Shahidullah-Kaisar/Library-Management-Server_A-3.git)  
+- [Live Frontend Site]( https://library-management-tau-pink.vercel.app/)
+- [Live Backend Site]([https://your-live-site.com](https://librarynode.vercel.app/))
 
 ---
 
